@@ -10,6 +10,16 @@ export default new Router({
       path: '/',
       name: 'HelloWorld',
       component: HelloWorld
+    },
+    {
+      path: '/studyroom',
+      name: 'Studyroom',
+      component: () => import('@/views/studyroom/index')
+    },
+    {
+      path: '/seat',
+      name: 'Seat',
+      component: () => import('@/views/seat/index')
     }
   ]
 })
