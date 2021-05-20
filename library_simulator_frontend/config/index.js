@@ -15,6 +15,11 @@ module.exports = {
         target: 'http://cuoshen.online:443/room',
         changeOrigin: true,
         pathRewrite: {'^/room': ''}
+      },
+      '/seat': {
+        target: 'http://cuoshen.online:443/seat',
+        changeOrigin: true,
+        pathRewrite: {'^/seat': ''}
       }
     },
 
