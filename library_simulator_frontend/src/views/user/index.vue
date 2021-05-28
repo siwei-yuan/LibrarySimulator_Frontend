@@ -11,8 +11,17 @@
     <li>User Name: Jerry Yuan </li>
     <li>User ID: 114514191</li>
     <li>
-      <a-button type="primary" @mouseover = "showp()" @mouseout="clearp()">Hover to View Password</a-button>
-      <p id="password"></p>
+      <div>
+        <a-button type="primary" @click = "showp()">Click to View Password</a-button>
+        <p v-if="visible">{{mypassword}}</p>
+      </div>
+      <div>
+        <div v-if = "resetvis">
+          <input v-model="mynewpassword" placeholder="Type Your New Password">
+          <a-button  type="primary" @click = "pushnew()">Done</a-button>
+        </div>
+        <a-button v-if = "resetvisbar"  type="primary" @click = "confirm()">click to confirm you new password</a-button>
+      </div>
     </li>
   </ul>
   </div>
@@ -21,10 +30,33 @@
 <script>
 export default {
   data () {
+    return {
+      mypassword: '1919810',
+      mynewpassword: '',
+      confirmed: '',
+      visible: false,
+      resetvis: false,
+      resetvisbar: true,
+      parity: true
+    }
   },
   methods: {
-    showp () { document.getElementById('password').innerHTML = '1919810' },
-    clearp () { document.getElementById('password').innerHTML = '' }
+    showp () {
+      if (this.parity) {
+        this.visible = true
+      } else {
+        this.visible = false
+      }
+      this.parity = !this.parity },
+    confirm () {
+      this.resetvis = true
+      this.resetvisbar = false },
+    pushnew () {
+      this.mypassword = this.mynewpassword
+      this.mynewpassword = ''
+      this.resetvis = false
+      this.resetvisbar = true
+    }
   }
 }
 </script>
