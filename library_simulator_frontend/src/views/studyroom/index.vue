@@ -88,37 +88,37 @@ export default {
         },
         {
           title: '8:00-10:00',
-          dataIndex: 'Availability[0]',
+          dataIndex: 'Time_available[0]',
           scopedSlots: { customRender: 'status0' }
         },
         {
           title: '10:00-12:00',
-          dataIndex: 'Availability[1]',
+          dataIndex: 'Time_available[1]',
           scopedSlots: { customRender: 'status1' }
         },
         {
           title: '12:00-14:00',
-          dataIndex: 'Availability[2]',
+          dataIndex: 'Time_available[2]',
           scopedSlots: { customRender: 'status2' }
         },
         {
           title: '14:00-16:00',
-          dataIndex: 'Availability[3]',
+          dataIndex: 'Time_available[3]',
           scopedSlots: { customRender: 'status3' }
         },
         {
           title: '16:00-18:00',
-          dataIndex: 'Availability[4]',
+          dataIndex: 'Time_available[4]',
           scopedSlots: { customRender: 'status4' }
         },
         {
           title: '18:00-20:00',
-          dataIndex: 'Availability[5]',
+          dataIndex: 'Time_available[5]',
           scopedSlots: { customRender: 'status5' }
         },
         {
           title: '20:00-22:00',
-          dataIndex: 'Availability[6]',
+          dataIndex: 'Time_available[6]',
           scopedSlots: { customRender: 'status6' }
         }
       ]
@@ -140,14 +140,22 @@ export default {
       this.roomList = []
       this.listLoading = true
       axios.get('/room').then(res => {
-        // console.log(res.data)
         if (value === null || value.length === 0) {
+          for (let j = 0; j < res.data.length; j++) {
+            for (let p = 0; p < 7; p++) {
+              if (res.data[j].Time_available[p] === 'True') {
+                res.data[j].Time_available[p] = true
+              } else {
+                res.data[j].Time_available[p] = false
+              }
+            }
+          }
           this.roomList = res.data
           for (let k = 0; k < res.data.length; k++) {
             this.nameList[k] = res.data[k].Name
             let emptyCount = 0
             for (let t = 0; t < 7; t++) {
-              if (res.data[k].Availability[t]) {
+              if (res.data[k].Time_available[t]) {
                 emptyCount = emptyCount + 1
               }
             }

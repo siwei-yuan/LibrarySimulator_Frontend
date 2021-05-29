@@ -5,9 +5,8 @@
       <a-menu
         theme="dark"
         mode="horizontal"
-        :default-selected-keys="['2']"
+        :default-selected-keys="[routerKey]"
         :style="{ lineHeight: '80px' }"
-        :defaultSelectedKeys="['1']"
         @click="handleChangeSite"
       >
         <a-menu-item style="font-size: larger" key="1">
@@ -66,12 +65,16 @@ export default {
   data () {
     return {
       readMoreVisible: false,
-      breadcrumbItem: 'Studyroom'
+      breadcrumbItem: '',
+      routerKey: ''
     }
+  },
+  created () {
+    this.currentPath()
   },
   methods: {
     handleChangeSite (event) {
-      console.log(event.key)
+      // console.log(event.key)
       if (event === undefined || event.key === '1') {
         this.$router.push({ name: 'studyroom' })
         this.breadcrumbItem = 'Studyroom'
@@ -81,6 +84,19 @@ export default {
       } else {
         this.$router.push({ name: 'user' })
         this.breadcrumbItem = 'Profile'
+      }
+    },
+    currentPath () {
+      // console.log(this.$route.path)
+      if (this.$route.path === '/user') {
+        this.routerKey = '3'
+        this.breadcrumbItem = 'Profile'
+      } else if (this.$route.path === '/seat') {
+        this.routerKey = '2'
+        this.breadcrumbItem = 'Seat Status'
+      } else {
+        this.routerKey = '1'
+        this.breadcrumbItem = 'Studyroom'
       }
     }
   }
