@@ -20,6 +20,16 @@ module.exports = {
         target: 'http://cuoshen.online:443/seat',
         changeOrigin: true,
         pathRewrite: {'^/seat': ''}
+      },
+      '/user': {
+        target: 'http://cuoshen.online:443/user',
+        changeOrigin: true,
+        pathRewrite: {'^/user': ''}
+      },
+      '/login': {
+        target: 'http://cuoshen.online:443',
+        changeOrigin: true,
+        pathRewrite: {'^/login': '/user'}
       }
     },
 

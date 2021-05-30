@@ -1,7 +1,9 @@
 <template>
   <a-layout id="components-layout-demo-top" class="layout">
     <a-layout-header style="height: 80px">
-      <div class="logo" />
+      <div class="logo">
+        <img src="~@/assets/logo.png" style="transform:scale(2)" />
+      </div>
       <a-menu
         theme="dark"
         mode="horizontal"
@@ -105,10 +107,9 @@ export default {
 
 <style>
 #components-layout-demo-top .logo {
-  width: 120px;
+  width: 80px;
   height: 31px;
-  background: rgba(255, 255, 255, 0.2);
-  margin: 16px 24px 16px 0;
+  margin: 3px 0px 0px 18px;
   float: left;
 }
 </style>
