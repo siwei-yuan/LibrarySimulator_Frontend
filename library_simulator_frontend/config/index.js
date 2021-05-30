@@ -30,6 +30,11 @@ module.exports = {
         target: 'http://cuoshen.online:443',
         changeOrigin: true,
         pathRewrite: {'^/login': '/user'}
+      },
+      '/reserve': {
+        target: 'http://cuoshen.online:443',
+        changeOrigin: true,
+        pathRewrite: {'^/reserve': '/room'}
       }
     },
 

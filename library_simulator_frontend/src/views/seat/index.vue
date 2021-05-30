@@ -15,7 +15,7 @@
         </a-col>
       </a-row>
     </div>
-    <div style="margin-left: 12px">
+    <div style="margin-left: 12px; position: relative">
       <a-row v-for="i in 20" :key="i">
         <a-col v-for="j in 24" :key="j" span="1">
           <a-popconfirm
@@ -23,13 +23,20 @@
             ok-text="Yes"
             cancel-text="No"
             @confirm="handleChooseSeat(i,j)"
+            v-if="seatStatusList[(i-1)*24+j-1] == 'True'"
           >
-            <img v-if="seatStatusList[(i-1)*24+j-1]"
-              src="~@/assets/seat-available.png" style="margin: 2px; cursor:pointer">
-            <img v-else src="~@/assets/seat-occupied.png" style="margin: 2px; cursor:pointer">
+            <img src="~@/assets/seat-available.png" style="margin: 2px; cursor:pointer">
           </a-popconfirm>
+          <img v-else-if="seatStatusList[(i-1)*24+j-1] == 'False'" src="~@/assets/seat-occupied.png" style="margin: 2px">
+          <img v-else src="~@/assets/empty.png" style="margin: 2px">
         </a-col>
       </a-row>
+      <div class="staircase first">
+        Staircase
+      </div>
+      <div class="staircase second">
+        Staircase
+      </div>
     </div>
   </div>
 </template>
@@ -60,9 +67,11 @@ export default {
         this.listLoading = false
         for (let i = 0; i < res.data.length; i++) {
           if (res.data[i].Available === 'True' && res.data[i].Is_seat === 'True') {
-            this.seatStatusList[i] = true
+            this.seatStatusList[i] = 'True'
+          } else if (res.data[i].Is_seat === 'False') {
+            this.seatStatusList[i] = 'Corridor'
           } else {
-            this.seatStatusList[i] = false
+            this.seatStatusList[i] = 'False'
           }
         }
       })
@@ -82,5 +91,28 @@ export default {
   width: 20px;
   margin-left: -10px;
   margin-top: 20px;
+}
+
+.staircase {
+  height: 150px;
+  width: 80px;
+  background-color:rgb(131, 173, 235);
+  line-height: 150px;
+  text-align: center;
+  border-radius: 15px;
+  box-shadow: 2px 2px 20px 5px #2b376b69;
+  color: white;
+  font-size: larger;
+  position: absolute;
+}
+
+.staircase.first {
+  margin-top: -28%;
+  margin-left: 25.5%;
+}
+
+.staircase.second {
+  margin-top: -28%;
+  margin-left: 67.2%;
 }
 </style>

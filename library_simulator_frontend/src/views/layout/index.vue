@@ -26,8 +26,11 @@
       :style="{backgroundColor: '#2e87c5', verticalAlign: 'middle'}"
       style="margin-left:95%; margin-top:-150px"
       >
-        Jerry
+        {{username}}
       </a-avatar>
+      <a-button type="link" style="position: absolute; margin-left: -150px; margin-top: -55px" @click="logout">
+        Logout
+      </a-button>
     </a-layout-header>
     <a-carousel autoplay style="margin-left: 50px; margin-right: 50px">
       <div>
@@ -43,6 +46,9 @@
       </div>
       <div>
         <a-alert message="New notifications will be displayed here, including your upcoming reservations." type="warning" show-icon />
+      </div>
+      <div>
+        <a-alert :message="reservation" type="info" show-icon />
       </div>
     </a-carousel>
     <a-layout-content style="padding: 0 50px">
@@ -63,16 +69,24 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   data () {
     return {
       readMoreVisible: false,
       breadcrumbItem: '',
-      routerKey: ''
+      routerKey: '',
+      username: '',
+      reservation: 'You do not have any reservations yet.'
     }
   },
   created () {
     this.currentPath()
+    this.checkLogin()
+  },
+  mounted () {
+    this.updateAvatar()
+    this.checkReservation()
   },
   methods: {
     handleChangeSite (event) {
@@ -100,6 +114,69 @@ export default {
         this.routerKey = '1'
         this.breadcrumbItem = 'Studyroom'
       }
+    },
+    checkLogin () {
+      const uid = localStorage.getItem('UID')
+      const uuid = localStorage.getItem('UID')
+      if (uid === null || uuid === null) {
+        this.$router.push({ name: 'login' })
+      }
+    },
+    updateAvatar () {
+      const url = '/user/' + localStorage.getItem('UID')
+      axios({
+        method: 'get',
+        url: url
+      }).then(res => {
+        console.log(res.data)
+        const index = res.data.indexOf('Username')
+        this.username = res.data[index + 11].toUpperCase()
+      })
+    },
+    logout () {
+      this.$router.push({ name: 'login' })
+    },
+    checkReservation () {
+      axios.get('/room').then(res => {
+        let slot, time, name
+        for (let i = 0; i < res.data.length; i++) {
+          for (let j = 0; j < 7; j++) {
+            if (res.data[i].Time_available[j] === localStorage.getItem('UID')) {
+              slot = j
+              name = res.data[i].Name
+              break
+            }
+          }
+        }
+        if (name && slot) {
+          switch (slot) {
+            case 0:
+              time = '8:00-10:00'
+              break
+            case 1:
+              time = '10:00-12:00'
+              break
+            case 2:
+              time = '12:00-14:00'
+              break
+            case 3:
+              time = '14:00-16:00'
+              break
+            case 4:
+              time = '16:00-18:00'
+              break
+            case 5:
+              time = '18:00-20:00'
+              break
+            case 6:
+              time = '20:00-22:00'
+              break
+            default:
+              time = ''
+          }
+          this.reservation = 'You have reserved: ' + name + ' at ' + time
+        }
+      })
     }
   }
 }

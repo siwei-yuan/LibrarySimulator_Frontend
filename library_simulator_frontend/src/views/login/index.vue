@@ -92,7 +92,7 @@ export default {
               this.$message.success('Login Success! Redirecting...')
               localStorage.setItem('UID', values.uid)
               localStorage.setItem('UUID', res.data)
-              // TODO: redirect page
+              this.$router.push({ name: 'studyroom' })
             } else {
               this.$message.error('Wrong Password!')
             }
@@ -113,7 +113,8 @@ export default {
             data: values
           }).then(res => {
             console.log(res.data)
-            // TODO: refresh page
+            this.modalVisible = false
+            this.$message.success('Sign-up Success! Please Login to your account.')
           })
         }
       })

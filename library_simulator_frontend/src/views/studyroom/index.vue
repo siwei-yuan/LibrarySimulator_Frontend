@@ -24,7 +24,7 @@
           ok-text="Yes"
           cancel-text="No"
           :key="i"
-          @confirm="makeReservation(record,table.Name,i)"
+          @confirm="makeReservation(table,table.Name,i)"
         >
           <a-button type="primary" size="small">
             Reserve
@@ -131,25 +131,41 @@ export default {
     handlefilter (value) {
       this.getList(value)
     },
-    makeReservation (time, room, i) {
-      console.log(time)
-      console.log(room)
-      console.log(i)
+    makeReservation (table, room, i) {
+      const id = table.Room_id
+      const slot = Number(i[6]) + 1
+      const uid = localStorage.getItem('UID')
+      const uuid = localStorage.getItem('UUID')
+      console.log(id + ' ' + uid + ' ' + uuid)
+      const url = '/reserve/' + id
+      axios({
+        method: 'patch',
+        url: url,
+        params: {slot: slot, uid: uid, uuid: uuid}
+      }).then(res => {
+        if (res.data === 'Room reservation successful\n') {
+          this.$message.success('Reservation Success!')
+          this.getList(null)
+        } else {
+          this.$message.error('Something went wrong. Please try again.')
+          this.getList(null)
+        }
+      })
     },
     getList (value) {
       this.roomList = []
       this.listLoading = true
       axios.get('/room').then(res => {
-        if (value === null || value.length === 0) {
-          for (let j = 0; j < res.data.length; j++) {
-            for (let p = 0; p < 7; p++) {
-              if (res.data[j].Time_available[p] === 'True') {
-                res.data[j].Time_available[p] = true
-              } else {
-                res.data[j].Time_available[p] = false
-              }
+        for (let j = 0; j < res.data.length; j++) {
+          for (let p = 0; p < 7; p++) {
+            if (res.data[j].Time_available[p] === 'True') {
+              res.data[j].Time_available[p] = true
+            } else {
+              res.data[j].Time_available[p] = false
             }
           }
+        }
+        if (value === null || value.length === 0) {
           this.roomList = res.data
           for (let k = 0; k < res.data.length; k++) {
             this.nameList[k] = res.data[k].Name
