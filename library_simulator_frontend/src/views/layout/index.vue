@@ -82,11 +82,11 @@ export default {
   },
   created () {
     this.currentPath()
-    this.checkLogin()
   },
   mounted () {
     this.updateAvatar()
     this.checkReservation()
+    this.checkLogin()
   },
   methods: {
     handleChangeSite (event) {
@@ -117,8 +117,8 @@ export default {
     },
     checkLogin () {
       const uid = localStorage.getItem('UID')
-      const uuid = localStorage.getItem('UID')
-      if (uid === null || uuid === null) {
+      const uuid = localStorage.getItem('UUID')
+      if (!uid || !uuid) {
         this.$router.push({ name: 'login' })
       }
     },

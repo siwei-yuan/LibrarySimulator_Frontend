@@ -1,44 +1,63 @@
 <template>
-  <div style="position: relative">
-    <a-skeleton :loading="listLoading" />
-    <div class="col-identifier">
-      <a-row>
-        <a-col v-for="j in 24" :key="j" span="1">
-          <p style="margin-left:8px">{{j}}</p>
-        </a-col>
-      </a-row>
-    </div>
-    <div class="row-identifier">
-      <a-row v-for="j in 20" :key="j">
-        <a-col style="height: 36px">
-          <p>{{j}}</p>
-        </a-col>
-      </a-row>
-    </div>
-    <div style="margin-left: 12px; position: relative">
-      <a-row v-for="i in 20" :key="i">
-        <a-col v-for="j in 24" :key="j" span="1">
-          <a-popconfirm
-            title="Are you sure to occupy this seat?"
-            ok-text="Yes"
-            cancel-text="No"
-            @confirm="handleChooseSeat(i,j)"
-            v-if="seatStatusList[(i-1)*24+j-1] == 'True'"
-          >
-            <img src="~@/assets/seat-available.png" style="margin: 2px; cursor:pointer">
-          </a-popconfirm>
-          <img v-else-if="seatStatusList[(i-1)*24+j-1] == 'False'" src="~@/assets/seat-occupied.png" style="margin: 2px">
-          <img v-else src="~@/assets/empty.png" style="margin: 2px">
-        </a-col>
-      </a-row>
-      <div class="staircase first">
-        Staircase
+  <a-spin :spinning="listLoading">
+    <div style="position: relative">
+      <div class="col-identifier">
+        <a-row>
+          <a-col v-for="j in 24" :key="j" span="1">
+            <p style="margin-left:8px">{{j}}</p>
+          </a-col>
+        </a-row>
       </div>
-      <div class="staircase second">
-        Staircase
+      <div class="row-identifier">
+        <a-row v-for="j in 20" :key="j">
+          <a-col style="height: 36px">
+            <p>{{j}}</p>
+          </a-col>
+        </a-row>
+      </div>
+      <div style="margin-left: 12px; position: relative">
+        <a-row v-for="i in 20" :key="i">
+          <a-col v-for="j in 24" :key="j" span="1">
+            <a-popconfirm
+              title="Are you sure to occupy this seat?"
+              ok-text="Yes"
+              cancel-text="No"
+              @confirm="handleChooseSeat(i,j)"
+              v-if="seatStatusList[(i-1)*24+j-1] == 'True'"
+            >
+              <img src="~@/assets/seat-available.png" style="margin: 2px; cursor:pointer">
+            </a-popconfirm>
+            <img v-else-if="seatStatusList[(i-1)*24+j-1] == 'False'" src="~@/assets/seat-occupied.png" style="margin: 2px">
+            <img v-else src="~@/assets/empty.png" style="margin: 2px">
+          </a-col>
+        </a-row>
+        <div class="staircase first">
+          Staircase
+        </div>
+        <div class="staircase second">
+          Staircase
+        </div>
+        <div class="rack first">
+          Bookrack
+        </div>
+        <div class="rack second">
+          Bookrack
+        </div>
+        <div class="rack third">
+          Bookrack
+        </div>
+        <div class="rack forth">
+          Bookrack
+        </div>
+        <div class="rack fifth">
+          Rack
+        </div>
+        <div class="rack sixth">
+          Rack
+        </div>
       </div>
     </div>
-  </div>
+  </a-spin>
 </template>
 
 <script>
@@ -57,7 +76,23 @@ export default {
   },
   methods: {
     handleChooseSeat (row, col) {
-      console.log(row + ',' + col)
+      const id = (row - 1) * 24 + col
+      const uid = localStorage.getItem('UID')
+      const uuid = localStorage.getItem('UUID')
+      const url = '/occupy/' + id
+      axios({
+        method: 'patch',
+        url: url,
+        params: {uid: uid, uuid: uuid}
+      }).then(res => {
+        if (res.data === 'Seat reservation successful\n') {
+          this.$message.success('Occupy seat success!')
+          this.getList()
+        } else {
+          this.$message.error('Something went wrong. Please try again.')
+          this.getList()
+        }
+      })
     },
     getList () {
       this.listLoading = true
@@ -115,4 +150,54 @@ export default {
   margin-top: -28%;
   margin-left: 67.2%;
 }
+
+.rack {
+  height: 50px;
+  width: 200px;
+  background-color:rgb(231, 129, 129);
+  line-height: 50px;
+  text-align: center;
+  border-radius: 10px;
+  box-shadow: 2px 2px 20px 5px #883a3a69;
+  color: white;
+  font-size: larger;
+  position: absolute;
+}
+
+.rack.first {
+  margin-top: -28.5%;
+  margin-left: 4.2%;
+}
+
+.rack.second {
+  margin-top: -20.5%;
+  margin-left: 4.2%;
+}
+
+.rack.third {
+  margin-top: -28.5%;
+  margin-left: 79.3%;
+}
+
+.rack.forth {
+  margin-top: -20.5%;
+  margin-left: 79.3%;
+}
+
+.rack.fifth {
+  height: 200px;
+  width: 50px;
+  line-height: 200px;
+  margin-top: -29.8%;
+  margin-left: 41.1%;
+}
+
+.rack.sixth {
+  height: 200px;
+  width: 50px;
+  line-height: 200px;
+  margin-top: -29.8%;
+  margin-left: 53.5%;
+}
+
 </style>

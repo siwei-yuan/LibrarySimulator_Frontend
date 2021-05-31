@@ -88,7 +88,7 @@ export default {
             url: url,
             params: {password: values.password}
           }).then(res => {
-            if (res.data !== 'Wrong password, login failed') {
+            if (res.data !== 'Wrong password, login failed\n') {
               this.$message.success('Login Success! Redirecting...')
               localStorage.setItem('UID', values.uid)
               localStorage.setItem('UUID', res.data)
@@ -112,9 +112,12 @@ export default {
             url: '/user',
             data: values
           }).then(res => {
-            console.log(res.data)
-            this.modalVisible = false
-            this.$message.success('Sign-up Success! Please Login to your account.')
+            if (res.data === 'User created successfully') {
+              this.modalVisible = false
+              this.$message.success('Sign-up Success! Please Login to your account.')
+            } else {
+              this.$message.error('Something went wrong :( Please try again.')
+            }
           })
         }
       })
