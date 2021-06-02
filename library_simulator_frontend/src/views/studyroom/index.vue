@@ -19,7 +19,7 @@
     >
       <template v-for="i in tableScopes" :slot="i" slot-scope="record,table">
         <a-popconfirm
-          v-if="record"
+          v-if="record && record !== 'MY'"
           title="Are you sure to reserve this study room?"
           ok-text="Yes"
           cancel-text="No"
@@ -29,6 +29,18 @@
           <a-button type="primary" size="small">
             Reserve
           </a-button>
+        </a-popconfirm>
+        <a-popconfirm
+          v-else-if="record == 'MY'"
+          title="Are you sure to cancel your reservation?"
+          ok-text="Yes"
+          cancel-text="No"
+          :key="i"
+          @confirm="makeReservation(table,table.Name,i)"
+        >
+          <a-tag color="green" :key="i" style="width: 50px; cursor: pointer">
+            <a-icon type="check-circle" style="margin-left:10px" />
+          </a-tag>
         </a-popconfirm>
         <a-tag v-else color="volcano" :key="i">
           <a-icon type="close-circle" />
@@ -145,11 +157,12 @@ export default {
       }).then(res => {
         if (res.data === 'Room reservation successful\n') {
           this.$message.success('Reservation Success!')
-          this.getList(null)
+        } else if (res.data === 'Successfully left studyroom\n') {
+          this.$message.success('Reservation cancelled successfully!')
         } else {
           this.$message.error('Something went wrong. Please try again.')
-          this.getList(null)
         }
+        this.getList(null)
       })
     },
     getList (value) {
@@ -160,6 +173,8 @@ export default {
           for (let p = 0; p < 7; p++) {
             if (res.data[j].Time_available[p] === 'True') {
               res.data[j].Time_available[p] = true
+            } else if (res.data[j].Time_available[p] === localStorage.getItem('UID')) {
+              res.data[j].Time_available[p] = 'MY'
             } else {
               res.data[j].Time_available[p] = false
             }

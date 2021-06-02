@@ -153,7 +153,7 @@ export default {
 
 .staircase {
   height: 150px;
-  width: 80px;
+  width: 6%;
   background-color:rgb(131, 173, 235);
   line-height: 150px;
   text-align: center;
@@ -165,18 +165,18 @@ export default {
 }
 
 .staircase.first {
-  margin-top: -28%;
+  margin-top: -380px;
   margin-left: 25.5%;
 }
 
 .staircase.second {
-  margin-top: -28%;
+  margin-top: -380px;
   margin-left: 67.2%;
 }
 
 .rack {
   height: 50px;
-  width: 200px;
+  width: 14.8%;
   background-color:rgb(231, 129, 129);
   line-height: 50px;
   text-align: center;
@@ -188,38 +188,38 @@ export default {
 }
 
 .rack.first {
-  margin-top: -28.5%;
+  margin-top: -388px;
   margin-left: 4.2%;
 }
 
 .rack.second {
-  margin-top: -20.5%;
+  margin-top: -278px;
   margin-left: 4.2%;
 }
 
 .rack.third {
-  margin-top: -28.5%;
+  margin-top: -388px;
   margin-left: 79.3%;
 }
 
 .rack.forth {
-  margin-top: -20.5%;
+  margin-top: -278px;
   margin-left: 79.3%;
 }
 
 .rack.fifth {
-  height: 200px;
-  width: 50px;
+  height: 27.5%;
+  width: 3.8%;
   line-height: 200px;
-  margin-top: -29.8%;
+  margin-top: -400px;
   margin-left: 41.1%;
 }
 
 .rack.sixth {
-  height: 200px;
-  width: 50px;
+  height: 27.5%;
+  width: 3.8%;
   line-height: 200px;
-  margin-top: -29.8%;
+  margin-top: -400px;
   margin-left: 53.5%;
 }
 
