@@ -8,6 +8,14 @@
           </a-col>
         </a-row>
       </div>
+      <div class="user-guide">
+        <img src="~@/assets/seat-available.png" style="margin: 2px">
+        : Available
+        <img src="~@/assets/seat-occupied.png" style="margin: 2px; margin-left: 25px">
+        : Occupied
+        <img src="~@/assets/seat-my.png" style="margin: 2px; margin-left: 25px">
+        : Your Seat
+      </div>
       <div class="row-identifier">
         <a-row v-for="j in 20" :key="j">
           <a-col style="height: 36px">
@@ -28,6 +36,15 @@
               <img src="~@/assets/seat-available.png" style="margin: 2px; cursor:pointer">
             </a-popconfirm>
             <img v-else-if="seatStatusList[(i-1)*24+j-1] == 'False'" src="~@/assets/seat-occupied.png" style="margin: 2px">
+            <a-popconfirm
+              title="Are you sure to leave your seat?"
+              ok-text="Yes"
+              cancel-text="No"
+              @confirm="handleChooseSeat(i,j)"
+              v-else-if="seatStatusList[(i-1)*24+j-1] == 'My'"
+            >
+              <img src="~@/assets/seat-my.png" style="margin: 2px; cursor:pointer">
+            </a-popconfirm>
             <img v-else src="~@/assets/empty.png" style="margin: 2px">
           </a-col>
         </a-row>
@@ -88,8 +105,11 @@ export default {
         if (res.data === 'Seat reservation successful\n') {
           this.$message.success('Occupy seat success!')
           this.getList()
+        } else if (res.data === 'Successfully left seat\n') {
+          this.$message.success('Time to get some rest :)')
+          this.getList()
         } else {
-          this.$message.error('Something went wrong. Please try again.')
+          this.$message.error(res.data.slice(0, -1))
           this.getList()
         }
       })
@@ -105,6 +125,8 @@ export default {
             this.seatStatusList[i] = 'True'
           } else if (res.data[i].Is_seat === 'False') {
             this.seatStatusList[i] = 'Corridor'
+          } else if (res.data[i].Available === localStorage.getItem('UID')) {
+            this.seatStatusList[i] = 'My'
           } else {
             this.seatStatusList[i] = 'False'
           }
@@ -119,6 +141,7 @@ export default {
 .col-identifier {
   height: 20px;
   margin-left: 15px;
+  margin-top: 40px;
 }
 
 .row-identifier {
@@ -200,4 +223,9 @@ export default {
   margin-left: 53.5%;
 }
 
+.user-guide {
+  position: absolute;
+  margin-top: -70px;
+  margin-left: 12px;
+}
 </style>

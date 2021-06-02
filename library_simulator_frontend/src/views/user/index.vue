@@ -13,7 +13,7 @@
      <li>User Password: {{myuser.password}}</li>
      <li>User Email: {{myuser.email}}</li>
    </ul>
-    <a-button type="link" shape="round" style="margin-left:60%" @click="showSignUpModal">Change Profile</a-button>
+    <a-button type="link" shape="round" style="margin-left:40.5%" @click="showSignUpModal">Change Profile</a-button>
     <a-modal
       title="New User Profile"
       :visible="modalVisible"
@@ -43,19 +43,37 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   data () {
     return {
-      myuser: {username: 'Jerry Yuan', password: '1919810', email: '114514@1919.com', UID: 740309},
+      myuser: {username: '', password: '', email: '', UID: 740309},
       buffer: {username: null, password: null, email: null},
       myerrs: [5, 5, 5], // first item to record err for user, email password
       modalVisible: false,
       updateInfo: this.$form.createForm(this, {name: 'updateInfo'}),
       triggered: false
-
     }
   },
+  mounted () {
+    this.getUserInfo()
+  },
   methods: {
+    getUserInfo () {
+      const url = '/user/' + localStorage.getItem('UID')
+      this.myuser.UID = localStorage.getItem('UID')
+      axios({
+        method: 'get',
+        url: url
+      }).then(res => {
+        const index = res.data.indexOf('\n')
+        res.data = JSON.parse(res.data.slice(index + 1, -1))
+        this.myuser.username = res.data.Username
+        this.myuser.password = res.data.Password
+        this.myuser.email = res.data.Email
+      })
+    },
     showSignUpModal () {
       this.modalVisible = true
       this.triggered = true
@@ -75,6 +93,7 @@ export default {
       let pOK = (this.myerrs[1] === 0)
       let eOK = (this.myerrs[2] === 0)
       if (uOK && pOK && eOK) {
+        console.log(this.buffer)
         return true
       } else {
         return false
@@ -86,7 +105,6 @@ export default {
         this.myerrs[0] = 1
         return 1
       } else if (value === this.myuser.username) {
-        callback('The new username must be different')
         this.myerrs[0] = 2
         return 2
       } else {
@@ -104,11 +122,9 @@ export default {
         this.myerrs[2] = 1
         return 1
       } else if (value === this.myuser.password) {
-        callback('The new password must be different')
         this.myerrs[2] = 2
         return 2
       } else if (value.length < 6) {
-        callback('The new password must have at least 6 characters')
         this.myerrs[2] = 3
         return 3
       } else {
@@ -121,12 +137,10 @@ export default {
         callback()
         this.myerrs[1] = 1
         return 1
-      }else if (!this.validEmail(value)) {
-        callback('The email address is not valid')
+      } else if (!this.validEmail(value)) {
         this.myerrs[1] = 2
         return 2
       } else if (value === this.myuser.email) {
-        callback('The new email address must be different')
         this.myerrs[1] = 3
         return 3
       } else {
