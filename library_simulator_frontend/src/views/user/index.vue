@@ -21,20 +21,19 @@
       @cancel="()=>{ modalVisible = false; myerrs[0]=5;myerrs[1]=5;myerrs[2]=5;}"
     >
       <a-form :form="updateInfo" :label-col="{ span: 5 }" :wrapper-col="{ span: 16 }">
-        <a-form-item label="Username">
-          <a-input  placeholder = 'New User Name'
-            v-decorator="['Username', { rules: [{ required: true, message: 'Please input your username!' },
-            {validator: validuser}]}]"
+        <a-form-item label="Username" >
+          <a-input   placeholder = 'New User Name' initialValue="test"
+                     v-decorator="['Username', { initialValue: myuser.username, rules: [{ required: true, message: 'Please input your E-mail!' }]}]"
           />
         </a-form-item>
         <a-form-item label="Email">
           <a-input  placeholder = 'New Email'
-            v-decorator="['Email', { rules: [{ required: true, message: 'Please input your E-mail!' },{validator: validemail}]}]"
+            v-decorator="['Email', { initialValue: myuser.email,rules: [{ required: true, message: 'Please input your E-mail!' }]}]"
           />
         </a-form-item>
         <a-form-item label="Password">
-          <a-input type = "password"  placeholder="New Password"
-            v-decorator="['Password', { rules: [{ required: true, message: 'Please input your password!' },{validator: validpassword}] }]"
+          <a-input type = 'password' placeholder="New Password"
+            v-decorator="['Password', { initialValue: myuser.password,rules: [{ required: true, message: 'Please input your password!' }] }]"
           />
         </a-form-item>
       </a-form>
@@ -49,10 +48,9 @@ export default {
   data () {
     return {
       myuser: {username: '', password: '', email: '', UID: 740309},
-      myerrs: [5, 5, 5], // first item to record err for user, email password
+      myerrs: [0, 0, 0], // first item to record err for user, email password
       modalVisible: false,
       updateInfo: this.$form.createForm(this, {name: 'updateInfo'}),
-      triggered: false
     }
   },
   mounted () {
@@ -75,7 +73,6 @@ export default {
     },
     showSignUpModal () {
       this.modalVisible = true
-      this.triggered = true
     },
     handleChange (e) {
       if (this.OKChange()) {
@@ -88,63 +85,49 @@ export default {
       }
     },
     OKChange () {
+      this.validuser(this.updateInfo.getFieldValue('Username'))
+      this.validemail(this.updateInfo.getFieldValue('Email'))
+      this.validpassword(this.updateInfo.getFieldValue('Password'))
       let uOK = (this.myerrs[0] === 0)
-      let pOK = (this.myerrs[1] === 0)
-      let eOK = (this.myerrs[2] === 0)
+      let pOK = (this.myerrs[2] === 0)
+      let eOK = (this.myerrs[1] === 0)
+      console.log(this.myerrs)
+      console.log(this.updateInfo.getFieldValue('Username'))
+      console.log(this.updateInfo.getFieldValue('Email'))
+      console.log(this.updateInfo.getFieldValue('Password'))
       if (uOK && pOK && eOK) {
         return true
       } else {
         return false
       }
     },
-    validuser (rule, value, callback) {
-      if (!value) {
-        callback()
+    validuser (user) {
+      if (!user) {
         this.myerrs[0] = 1
-        return 1
-      } else if (value === this.myuser.username) {
-        callback('The new username must be different')
-        this.myerrs[0] = 2
-        return 2
       } else {
         this.myerrs[0] = 0
-        return 0
       }
     },
     validEmail (email) {
       var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
       return re.test(email)
     },
-    validpassword (rule, value, callback) {
-      if (!value) {
-        callback()
+    validpassword (pwd) {
+      if (!pwd) {
         this.myerrs[2] = 1
-        return 1
-      } else if (value === this.myuser.password) {
+      } else if (pwd.length < 6) {
         this.myerrs[2] = 2
-        return 2
-      } else if (value.length < 6) {
-        this.myerrs[2] = 3
-        return 3
       } else {
         this.myerrs[2] = 0
-        return 0
       }
     },
-    validemail (rule, value, callback) {
-      if (!value) {
-        callback()
+    validemail (email) {
+      if (!email) {
         this.myerrs[1] = 1
-        return 1
-      } else if (!this.validEmail(value)) {
+      } else if (!this.validEmail(email)) {
         this.myerrs[1] = 2
-        return 2
-      } else if (value === this.myuser.email) {
-        this.myerrs[1] = 3
-        return 3
       } else {
         this.myerrs[1] = 0
-        return 0
       }
     }
   }

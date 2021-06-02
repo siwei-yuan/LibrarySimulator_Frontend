@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6995c771-839d-4ea2-b828-859583457fd1" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/library_simulator_frontend/src/views/user/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/library_simulator_frontend/src/views/user/index.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -47,7 +48,7 @@
       <workItem from="1622459169346" duration="12922000" />
       <workItem from="1622514903177" duration="21000" />
       <workItem from="1622608199551" duration="28000" />
-      <workItem from="1622608259949" duration="4712000" />
+      <workItem from="1622608259949" duration="8676000" />
     </task>
     <servers />
   </component>
