@@ -18,22 +18,22 @@
       title="New User Profile"
       :visible="modalVisible"
       @ok="handleChange"
-      @cancel="()=>{ buffer.username =null; buffer.password=null; buffer.email=null; modalVisible = false; myerrs[0]=5;myerrs[1]=5;myerrs[2]=5;}"
+      @cancel="()=>{ modalVisible = false; myerrs[0]=5;myerrs[1]=5;myerrs[2]=5;}"
     >
       <a-form :form="updateInfo" :label-col="{ span: 5 }" :wrapper-col="{ span: 16 }">
         <a-form-item label="Username">
-          <a-input v-model="buffer.username" placeholder = 'New User Name'
+          <a-input  placeholder = 'New User Name'
             v-decorator="['Username', { rules: [{ required: true, message: 'Please input your username!' },
             {validator: validuser}]}]"
           />
         </a-form-item>
         <a-form-item label="Email">
-          <a-input v-model="buffer.email" placeholder = 'New Email'
+          <a-input  placeholder = 'New Email'
             v-decorator="['Email', { rules: [{ required: true, message: 'Please input your E-mail!' },{validator: validemail}]}]"
           />
         </a-form-item>
         <a-form-item label="Password">
-          <a-input type = "password" v-model="buffer.password" placeholder="New Password"
+          <a-input type = "password"  placeholder="New Password"
             v-decorator="['Password', { rules: [{ required: true, message: 'Please input your password!' },{validator: validpassword}] }]"
           />
         </a-form-item>
@@ -49,7 +49,6 @@ export default {
   data () {
     return {
       myuser: {username: '', password: '', email: '', UID: 740309},
-      buffer: {username: null, password: null, email: null},
       myerrs: [5, 5, 5], // first item to record err for user, email password
       modalVisible: false,
       updateInfo: this.$form.createForm(this, {name: 'updateInfo'}),
@@ -80,9 +79,9 @@ export default {
     },
     handleChange (e) {
       if (this.OKChange()) {
-        this.myuser.username = this.buffer.username
-        this.myuser.password = this.buffer.password
-        this.myuser.email = this.buffer.email
+        this.myuser.username = this.updateInfo.getFieldValue('Username')
+        this.myuser.password = this.updateInfo.getFieldValue('Password')
+        this.myuser.email = this.updateInfo.getFieldValue('Email')
         this.modalVisible = false
       } else {
         e.preventDefault()
@@ -93,7 +92,6 @@ export default {
       let pOK = (this.myerrs[1] === 0)
       let eOK = (this.myerrs[2] === 0)
       if (uOK && pOK && eOK) {
-        console.log(this.buffer)
         return true
       } else {
         return false
@@ -105,6 +103,7 @@ export default {
         this.myerrs[0] = 1
         return 1
       } else if (value === this.myuser.username) {
+        callback('The new username must be different')
         this.myerrs[0] = 2
         return 2
       } else {
