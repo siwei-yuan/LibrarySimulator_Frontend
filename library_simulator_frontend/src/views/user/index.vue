@@ -8,10 +8,9 @@
       {{myuser.username}}
     </a-avatar></p>
    <ul style="list-style-type:square;margin-left:40%;">
-     <li>User Name: {{myuser.username}}</li>
-     <li>User ID: {{myuser.UID}}</li>
-     <li>User Password: {{myuser.password}}</li>
-     <li>User Email: {{myuser.email}}</li>
+     <li>Username: {{myuser.username}}</li>
+     <li>UID: {{myuser.UID}}</li>
+     <li>Email: {{myuser.email}}</li>
    </ul>
     <a-button type="link" shape="round" style="margin-left:40.5%" @click="showSignUpModal">Change Profile</a-button>
     <a-modal
@@ -50,7 +49,7 @@ export default {
       myuser: {username: '', password: '', email: '', UID: 740309},
       myerrs: [0, 0, 0], // first item to record err for user, email password
       modalVisible: false,
-      updateInfo: this.$form.createForm(this, {name: 'updateInfo'}),
+      updateInfo: this.$form.createForm(this, {name: 'updateInfo'})
     }
   },
   mounted () {
