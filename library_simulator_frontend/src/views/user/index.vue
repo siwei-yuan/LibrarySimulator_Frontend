@@ -22,7 +22,7 @@
       <a-form :form="updateInfo" :label-col="{ span: 5 }" :wrapper-col="{ span: 16 }">
         <a-form-item label="Username" >
           <a-input   placeholder = 'New User Name' initialValue="test"
-                     v-decorator="['Username', { initialValue: myuser.username, rules: [{ required: true, message: 'Please input your E-mail!' }]}]"
+                     v-decorator="['Username', { initialValue: myuser.username, rules: [{ required: true, message: 'Please input your Username!' }]}]"
           />
         </a-form-item>
         <a-form-item label="Email">
@@ -34,6 +34,14 @@
           <a-input-password type = 'password' placeholder="New Password"
             v-decorator="['Password', { initialValue: myuser.password,rules: [{ required: true, message: 'Please input your password!' }] }]"
           />
+          <a-popover style="margin-left:5%;margin-top: -0.5px ">
+            <template slot="content">
+              <p>The username can be any non-empty string.</p>
+              <p>The email address needs to be a valid email address</p>
+              <p>The password need to be no less than 6 characters</p>
+            </template>
+            <a-button type="link" icon="question-circle" style="margin-left: 140px; margin-top: 15px; position: absolute" />
+          </a-popover>
         </a-form-item>
       </a-form>
     </a-modal>
