@@ -31,7 +31,7 @@
           />
         </a-form-item>
         <a-form-item label="Password">
-          <a-input type = 'password' placeholder="New Password"
+          <a-input-password type = 'password' placeholder="New Password"
             v-decorator="['Password', { initialValue: myuser.password,rules: [{ required: true, message: 'Please input your password!' }] }]"
           />
         </a-form-item>
@@ -90,11 +90,24 @@ export default {
       let uOK = (this.myerrs[0] === 0)
       let pOK = (this.myerrs[2] === 0)
       let eOK = (this.myerrs[1] === 0)
-      console.log(this.myerrs)
-      console.log(this.updateInfo.getFieldValue('Username'))
-      console.log(this.updateInfo.getFieldValue('Email'))
-      console.log(this.updateInfo.getFieldValue('Password'))
+      // console.log(this.myerrs)
+      const username = this.updateInfo.getFieldValue('Username')
+      const email = this.updateInfo.getFieldValue('Email')
+      const password = this.updateInfo.getFieldValue('Password')
       if (uOK && pOK && eOK) {
+        const url = '/user/' + localStorage.getItem('UID')
+        axios({
+          method: 'patch',
+          url: url,
+          params: {uuid: localStorage.getItem('UUID'), username: username, email: email, password: password}
+        }).then(res => {
+          if (res.data === 'Successfully updated user\'s information\n') {
+            this.getUserInfo()
+            this.$message.success('Profile information changed!')
+          } else {
+            this.$message.error('Something went wrong :(')
+          }
+        })
         return true
       } else {
         return false

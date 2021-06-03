@@ -2,7 +2,7 @@
   <a-layout id="components-layout-demo-top" class="layout">
     <a-layout-header style="height: 80px">
       <div class="logo">
-        <img src="~@/assets/logo.png" style="transform:scale(2)" />
+        <img src="~@/assets/logo.png" style="transform:scale(1.5)" />
       </div>
       <a-menu
         theme="dark"
@@ -87,9 +87,22 @@ export default {
     this.updateAvatar()
     this.checkReservation()
     this.checkLogin()
+    if (this.timer) {
+      clearInterval(this.timer)
+    } else {
+      this.timer = setInterval(() => {
+        if (localStorage.getItem('CHANGED') === 'TRUE') {
+          this.checkReservation()
+        }
+      }, 10000)
+    }
+  },
+  destroyed () {
+    clearInterval(this.timer)
   },
   methods: {
     handleChangeSite (event) {
+      this.checkReservation()
       // console.log(event.key)
       if (event === undefined || event.key === '1') {
         this.$router.push({ name: 'studyroom' })
@@ -128,54 +141,61 @@ export default {
         method: 'get',
         url: url
       }).then(res => {
-        console.log(res.data)
+        // console.log(res.data)
         const index = res.data.indexOf('Username')
         this.username = res.data[index + 11].toUpperCase()
       })
     },
     logout () {
       this.$router.push({ name: 'login' })
+      localStorage.setItem('UID', '')
+      localStorage.setItem('UUID', '')
     },
     checkReservation () {
+      // console.log('CHECKED')
       axios.get('/room').then(res => {
         let slot, time, name
         for (let i = 0; i < res.data.length; i++) {
           for (let j = 0; j < 7; j++) {
             if (res.data[i].Time_available[j] === localStorage.getItem('UID')) {
-              slot = j
+              slot = j + 1
               name = res.data[i].Name
+              // console.log(slot + ' ' + name)
               break
             }
           }
         }
         if (name && slot) {
           switch (slot) {
-            case 0:
+            case 1:
               time = '8:00-10:00'
               break
-            case 1:
+            case 2:
               time = '10:00-12:00'
               break
-            case 2:
+            case 3:
               time = '12:00-14:00'
               break
-            case 3:
+            case 4:
               time = '14:00-16:00'
               break
-            case 4:
+            case 5:
               time = '16:00-18:00'
               break
-            case 5:
+            case 6:
               time = '18:00-20:00'
               break
-            case 6:
+            case 7:
               time = '20:00-22:00'
               break
             default:
               time = ''
           }
           this.reservation = 'You have reserved: ' + name + ' at ' + time
+        } else {
+          this.reservation = 'You do not have any reservations yet.'
         }
+        localStorage.setItem('CHANGED', '')
       })
     }
   }

@@ -148,7 +148,7 @@ export default {
       const slot = Number(i[6]) + 1
       const uid = localStorage.getItem('UID')
       const uuid = localStorage.getItem('UUID')
-      console.log(id + ' ' + uid + ' ' + uuid)
+      // console.log(id + ' ' + uid + ' ' + uuid)
       const url = '/reserve/' + id
       axios({
         method: 'patch',
@@ -163,6 +163,7 @@ export default {
           this.$message.error('Something went wrong. Please try again.')
         }
         this.getList(null)
+        localStorage.setItem('CHANGED', 'TRUE')
       })
     },
     getList (value) {
@@ -212,7 +213,7 @@ export default {
           }
         }
         this.listLoading = false
-        console.log(this.statusList)
+        // console.log(this.statusList)
       })
     }
   }

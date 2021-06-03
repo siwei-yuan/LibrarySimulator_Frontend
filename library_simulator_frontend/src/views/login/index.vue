@@ -13,7 +13,7 @@
           />
         </a-form-item>
         <a-form-item label="Password">
-          <a-input
+          <a-input-password
             v-decorator="['password', { rules: [{ required: true, message: 'Please input your password!' }] }]"
           />
         </a-form-item>
@@ -56,7 +56,7 @@
           />
         </a-form-item>
         <a-form-item label="Password">
-          <a-input
+          <a-input-password
             v-decorator="['Password', { rules: [{ required: true, message: 'Please input your password!' }] }]"
           />
         </a-form-item>
@@ -106,7 +106,7 @@ export default {
     handleSubmitSignUp () {
       this.signUpForm.validateFields((err, values) => {
         if (!err) {
-          console.log('Received values of signup form: ', values)
+          // console.log('Received values of signup form: ', values)
           axios({
             method: 'post',
             url: '/user',
