@@ -1,7 +1,7 @@
 # Library Reservation System
 
-> A Vue.js project
 >IMPORTANT!
+
 >Now the frontend communicates with the backend server that is deployed on our linux machine with
 >url: http://cuoshen.online:443. This server is running the same code as we submitted. But in case
 >you want to test with server deployed on you own machine with url: localhost:PORT, please go to
