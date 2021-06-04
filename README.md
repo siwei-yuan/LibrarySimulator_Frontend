@@ -1,6 +1,14 @@
 # Library Reservation System
 
 > A Vue.js project
+>IMPORTANT!
+>Now the frontend communicates with the backend server that is deployed on our linux machine with
+>url: http://cuoshen.online:443. This server is running the same code as we submitted. But in case
+>you want to test with server deployed on you own machine with url: localhost:PORT, please go to
+>library_simulator_frontend/config/index.js, and change all occurences of http://cuoshen.online:443
+>to your localhost address and corresponding port. This is a proxy table to solve cross origin issues.
+>However, if the cross origin issue still appears (depends on the browser), you can switch back to 
+>http://cuoshen.online:443 to test our system.
 
 ## Clone
 
