@@ -195,7 +195,7 @@ export default {
               case 0:
                 this.statusList[k] = 'full'
                 break
-              case 6:
+              case 7:
                 this.statusList[k] = 'empty'
                 break
               default:
@@ -241,10 +241,10 @@ export default {
 .room-box.full {
   background: #ff6e6e9f;
 }
-.room-box.empty{
+.room-box.normal{
   background: #4fcabada;
 }
-.room-box.normal{
+.room-box.empty{
   background: #fff4bd;
   color: black;
 }
